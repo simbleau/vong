@@ -27,10 +27,11 @@ pub fn main() {
                     ..default()
                 })
                 .set(RenderPlugin {
-                    render_creation: RenderCreation::Automatic(WgpuSettings {
+                    render_creation: WgpuSettings {
                         backends: Some(Backends::PRIMARY),
                         ..default()
-                    }),
+                    }
+                    .into(),
                 }),
         )
         .insert_resource(ClearColor(Color::BLACK))

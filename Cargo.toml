@@ -18,7 +18,30 @@ lto = true
 opt-level = 3
 
 [dependencies]
-bevy = "0.12"
+bevy = { version = "0.12", default-features = false, features = [
+  "animation",
+  "bevy_asset",
+  "bevy_audio",
+  "bevy_gilrs",
+  "bevy_scene",
+  "bevy_winit",
+  "bevy_core_pipeline",
+  "bevy_pbr",
+  "bevy_gltf",
+  "bevy_render",
+  "bevy_sprite",
+  "bevy_text",
+  "bevy_ui",
+  "multi-threaded",
+  "png",
+  "hdr",
+  "vorbis",
+  "x11",
+  "bevy_gizmos",
+  "android_shared_stdcxx",
+  "tonemapping_luts",
+  "default_font",
+] }
 image = "0.24"
 winit = "0.28"
 bevy-vello = { git = "https://github.com/vectorgameexperts/bevy-vello", version = "0.3" }

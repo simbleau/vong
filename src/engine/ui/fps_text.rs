@@ -25,7 +25,7 @@ struct FpsText;
 #[derive(Component)]
 struct ColorText;
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup(mut commands: Commands) {
     // Text with multiple sections
     commands.spawn((
         // Create a TextBundle that has a Text with a list of sections.
