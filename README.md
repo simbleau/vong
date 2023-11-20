@@ -6,6 +6,12 @@ This repository contains source code for the first native use of a compute-centr
 
 ---
 
+## ✍️ Authors
+
+- [@A2SR](https://github.com/A2SR) - Aaron Rinehart
+- [@seabassjh](https://github.com/seabassjh) - Sebastian J. Hamel
+- [@simbleau](https://github.com/simbleau) - Spencer C. Imbleau
+
 ## 🚩 Goals
 
 - Use *fast* vector graphics in a video game

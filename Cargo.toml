@@ -1,5 +1,10 @@
 [package]
 name = "vong"
+authors = [
+  "Aaron Rinehart <aaron.rinehart1@gmail.com>",
+  "Sebastian J. Hamel <sebjfk@gmail.com>",
+  "Spencer C. Imbleau <spencer@imbleau.com>",
+]
 version = "0.1.0"
 edition = "2021"
 
