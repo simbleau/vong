@@ -25,4 +25,3 @@ This repository contains source code for the first native use of a compute-centr
 ## 🔏 License
 
 This project is dual-licensed under both [Apache 2.0](LICENSE-APACHE) and [MIT](LICENSE-MIT) licenses.
-# vong
