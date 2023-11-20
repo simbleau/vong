@@ -1,6 +1,7 @@
 # 🕹️ Vong
 
 This repository contains source code for the first native use of a compute-centric vector graphics video game, inspired by Pong.
+
 ![Screen Recording 2023-02-20 at 12 35 22](https://user-images.githubusercontent.com/48108917/220213333-9490b8f5-56f7-42e2-a26e-b73bd387e24e.gif)
 
 ---
