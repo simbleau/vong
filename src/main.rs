@@ -1,9 +1,10 @@
 #![allow(clippy::type_complexity)]
 
 use bevy::{
+    asset::AssetMetaCheck,
     prelude::*,
     render::{
-        settings::{Backends, RenderCreation, WgpuSettings},
+        settings::{Backends, WgpuSettings},
         RenderPlugin,
     },
     window::PresentMode,
@@ -16,6 +17,7 @@ mod game;
 
 pub fn main() {
     App::new()
+        .insert_resource(AssetMetaCheck::Never)
         .add_plugins(
             DefaultPlugins
                 .set(WindowPlugin {
@@ -34,8 +36,8 @@ pub fn main() {
                     .into(),
                 }),
         )
-        .insert_resource(ClearColor(Color::BLACK))
         .add_plugins(VelloPlugin)
+        .insert_resource(ClearColor(Color::BLACK))
         .add_plugins(CameraPlugin)
         .add_plugins(UiPlugin)
         .add_plugins(PhysicsPlugin)

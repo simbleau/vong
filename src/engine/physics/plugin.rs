@@ -38,18 +38,20 @@ fn create_vello_colliders(
     vectors: Res<Assets<VelloVector>>,
 ) {
     for (e, vec_handle) in query.iter() {
-        let vector = vectors.get(vec_handle).unwrap();
-        const EGG: &str = include_str!("../../../assets/vectors/egg.svg");
-        const BACON: &str = include_str!("../../../assets/vectors/bacon.svg");
+        let Some(vector) = vectors.get(vec_handle) else {
+            return;
+        };
+        const EGG: &str = include_str!("../../../assets/egg.svg");
+        const BACON: &str = include_str!("../../../assets/bacon.svg");
         let tree = match vec_handle
             .path()
             .map(|ap| ap.path().to_str().unwrap())
             .unwrap()
         {
-            "vectors/egg.svg" => {
+            "egg.svg" => {
                 usvg::Tree::from_str(EGG, &usvg::Options::default()).unwrap()
             }
-            "vectors/bacon.svg" => {
+            "bacon.svg" => {
                 usvg::Tree::from_str(BACON, &usvg::Options::default()).unwrap()
             }
             e => panic!("{e:?}"),
@@ -80,17 +82,17 @@ fn create_vello_colliders(
 pub fn show_debug_visualizations(
     keyboard_input: Res<Input<KeyCode>>,
     mut query_physics: ResMut<DebugRenderContext>,
-    mut query: Query<&mut bevy_vello::DebugVisualizations>,
+    mut query: Query<&mut bevy_vello::debug::DebugVisualizations>,
 ) {
     if keyboard_input.just_pressed(KeyCode::Q) {
         query_physics.enabled = !query_physics.enabled;
         for mut flag in query.iter_mut() {
             *flag = match *flag {
-                bevy_vello::DebugVisualizations::Hidden => {
-                    bevy_vello::DebugVisualizations::Visible
+                bevy_vello::debug::DebugVisualizations::Hidden => {
+                    bevy_vello::debug::DebugVisualizations::Visible
                 }
-                bevy_vello::DebugVisualizations::Visible => {
-                    bevy_vello::DebugVisualizations::Hidden
+                bevy_vello::debug::DebugVisualizations::Visible => {
+                    bevy_vello::debug::DebugVisualizations::Hidden
                 }
             };
         }

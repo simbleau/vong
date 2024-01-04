@@ -8,7 +8,7 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use bevy_vello::{DebugVisualizations, VelloVectorBundle};
+use bevy_vello::{debug::DebugVisualizations, VelloVectorBundle};
 use std::f32::consts::PI;
 
 pub struct PongGamePlugin;
@@ -25,9 +25,8 @@ impl Plugin for PongGamePlugin {
 pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     // Background
     commands.spawn(VelloVectorBundle {
-        vector: asset_server.load("vectors/bg.svg"),
+        vector: asset_server.load("bg.svg"),
         origin: bevy_vello::Origin::Center,
-        layer: bevy_vello::Layer::Shadow,
         debug_visualizations: DebugVisualizations::Hidden,
         transform: Transform::from_scale(Vec3::splat(3.0)),
         ..default()
@@ -35,9 +34,8 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
 
     // Spawn pan
     commands.spawn(VelloVectorBundle {
-        vector: asset_server.load("vectors/pan.svg"),
+        vector: asset_server.load("pan.svg"),
         origin: bevy_vello::Origin::Center,
-        layer: bevy_vello::Layer::Shadow,
         debug_visualizations: DebugVisualizations::Hidden,
         transform: Transform::from_xyz(-270.0, 343., 0.)
             .with_scale(Vec3::splat(3.3)),
@@ -60,8 +58,7 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     commands
         .spawn(PaddleBundle {
             sprite: VelloVectorBundle {
-                vector: asset_server.load("vectors/bacon.svg"),
-                layer: bevy_vello::Layer::Foreground,
+                vector: asset_server.load("bacon.svg"),
                 origin: bevy_vello::Origin::Center,
                 debug_visualizations: DebugVisualizations::Hidden,
                 transform: Transform::from_xyz(-385.0, 0.0, 0.0)
@@ -80,9 +77,8 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     commands
         .spawn(PaddleBundle {
             sprite: VelloVectorBundle {
-                vector: asset_server.load("vectors/bacon.svg"),
+                vector: asset_server.load("bacon.svg"),
                 origin: bevy_vello::Origin::Center,
-                layer: bevy_vello::Layer::Foreground,
                 debug_visualizations: DebugVisualizations::Hidden,
                 transform: Transform::from_xyz(385.0, 0.0, 0.0)
                     .with_scale(Vec3::new(-0.2, 0.1, 0.1))
@@ -123,9 +119,8 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
             principal_inertia: 1000.0,
         }))
         .insert(VelloVectorBundle {
-            vector: asset_server.load("vectors/egg.svg"),
+            vector: asset_server.load("egg.svg"),
             origin: bevy_vello::Origin::Center,
-            layer: bevy_vello::Layer::Ground,
             debug_visualizations: DebugVisualizations::Hidden,
             transform: Transform::from_scale(Vec3::splat(0.1)),
             ..Default::default()
