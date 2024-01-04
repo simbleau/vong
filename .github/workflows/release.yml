@@ -22,7 +22,6 @@ jobs:
     # Install cargo deps
     - name: Trunk build
       run: |
-        cd demo
         trunk build --release --public-url /vong/
 
     # Deploy, GitHub Pages
