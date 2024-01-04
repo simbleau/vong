@@ -24,6 +24,8 @@ pub fn main() {
                     primary_window: Some(Window {
                         title: "Vong".to_string(),
                         present_mode: PresentMode::AutoVsync,
+                        fit_canvas_to_parent: true,
+                        prevent_default_event_handling: true,
                         ..default()
                     }),
                     ..default()
