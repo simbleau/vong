@@ -7,9 +7,9 @@
 
   <!-- Links -->
   
-<script type="module" nonce="A71jJvQTuOfv1PxNATBptw==">
-import init, * as bindings from '/vong/vong-cafb3d86ab347503.js';
-const wasm = await init('/vong/vong-cafb3d86ab347503_bg.wasm');
+<script type="module" nonce="nawIzqNcN0mCxfUVHemlZg==">
+import init, * as bindings from '/vong/vong-d7ce919df5e54d1.js';
+const wasm = await init('/vong/vong-d7ce919df5e54d1_bg.wasm');
 
 
 window.wasmBindings = bindings;
@@ -20,25 +20,33 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 </script>
   
 
-<link rel="modulepreload" href="/vong/vong-cafb3d86ab347503.js" crossorigin=anonymous integrity="sha384-YdHsZH7mnTHPopTHIkCs2Mcq4HVySt7IW9ty+eakBSp5BDHkdgfW/P41uKgO2MlH">
-<link rel="preload" href="/vong/vong-cafb3d86ab347503_bg.wasm" crossorigin=anonymous integrity="sha384-TieP394jV1z8LZqcDEFWZCaFaHSVcTuML1itoOvkR917Nxa9rAH5rekXzwDWrfyC" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="/vong/vong-d7ce919df5e54d1.js" crossorigin=anonymous integrity="sha384-SqWm/O7E2DangKd2q93H9eiibsl/Lhbm4DAW/Znlb3ssiRyRy1bF8nXE33619zNO">
+<link rel="preload" href="/vong/vong-d7ce919df5e54d1_bg.wasm" crossorigin=anonymous integrity="sha384-I3Q6f6JSrZdugmgon/knnSpr+hVyb9G7SuTrBsy5g2T6dz7IrbVNbUm0vIP3PiLb" as="fetch" type="application/wasm"></head>
 
 <body>
   <style>
     body {
       margin: 0;
       padding: 0;
-      height: 100vh;
       width: 100vw;
-      overflow: hidden;
+      height: 100vh;
+      background-color: black;
     }
 
     canvas {
       outline: none;
       -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-      /* mobile webkit */
+    }
+
+    #canvas-container {
+      width: 100%;
+      height: 100%;
     }
   </style>
+
+  <div id="canvas-container">
+    <canvas id="c" oncontextmenu="return false;"></canvas>
+  </div>
 </body>
 
 </html>
