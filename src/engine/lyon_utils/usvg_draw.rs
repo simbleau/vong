@@ -1,43 +1,25 @@
-use bevy::{
-    asset::Handle,
-    math::{Mat4, Vec2},
-    reflect::TypeUuid,
-    render::{color::Color, mesh::Mesh},
-    transform::components::Transform,
-};
-use bevy_vello::vello_svg::usvg;
+use super::Convert;
+use bevy::{color::Color, math::Mat4, transform::components::Transform};
 use copyless::VecHelper;
 use lyon_geom::euclid::default::Transform2D;
 use lyon_path::PathEvent;
 use lyon_tessellation::math::Point;
-use svgtypes::ViewBox;
-
-use super::Convert;
 
 /// A loaded and deserialized SVG file.
-#[derive(Debug, TypeUuid)]
-#[uuid = "d2c5985d-e221-4257-9e3b-ff0fb87e28ba"]
+#[derive(Debug)]
 pub struct Svg {
     /// The name of the file.
     pub name: String,
-    /// Size of the SVG.
-    pub size: Vec2,
-    /// ViewBox of the SVG.
-    pub view_box: ViewBox,
     /// All paths that make up the SVG.
     pub paths: Vec<PathDescriptor>,
-    /// The fully tessellated paths as [`Mesh`].
-    pub mesh: Handle<Mesh>,
 }
 
 impl Svg {
-    pub(crate) fn from_tree(tree: &usvg::Tree) -> Svg {
-        let view_box = tree.view_box;
-        let size = tree.size;
+    pub(crate) fn from_tree(tree: &::usvg::Tree) -> Svg {
         let mut descriptors = Vec::new();
 
         for node in tree.root.descendants() {
-            if let usvg::NodeKind::Path(ref path) = *node.borrow() {
+            if let ::usvg::NodeKind::Path(ref path) = *node.borrow() {
                 let t = path.transform;
                 let abs_t = Transform::from_matrix(Mat4::from_cols(
                     [t.a.abs() as f32, t.b as f32, 0.0, 0.0].into(),
@@ -48,7 +30,7 @@ impl Svg {
 
                 if let Some(ref fill) = path.fill {
                     let color = match fill.paint {
-                        usvg::Paint::Color(c) => Color::rgba_u8(
+                        ::usvg::Paint::Color(c) => Color::srgba_u8(
                             c.red,
                             c.green,
                             c.blue,
@@ -80,15 +62,7 @@ impl Svg {
 
         Svg {
             name: Default::default(),
-            size: Vec2::new(size.width() as f32, size.height() as f32),
-            view_box: ViewBox {
-                x: view_box.rect.x(),
-                y: view_box.rect.y(),
-                w: view_box.rect.width(),
-                h: view_box.rect.height(),
-            },
             paths: descriptors,
-            mesh: Default::default(),
         }
     }
 }
@@ -109,7 +83,7 @@ pub enum DrawType {
 
 // Taken from https://github.com/nical/lyon/blob/74e6b137fea70d71d3b537babae22c6652f8843e/examples/wgpu_svg/src/main.rs
 pub(crate) struct PathConvIter<'a> {
-    iter: usvg::PathSegmentsIter<'a>,
+    iter: ::usvg::PathSegmentsIter<'a>,
     prev: Point,
     first: Point,
     needs_end: bool,
@@ -127,7 +101,7 @@ impl<'l> Iterator for PathConvIter<'l> {
         let mut return_event = None;
         let next = self.iter.next();
         match next {
-            Some(usvg::PathSegment::MoveTo { x, y }) => {
+            Some(::usvg::PathSegment::MoveTo { x, y }) => {
                 if self.needs_end {
                     let last = self.prev;
                     let first = self.first;
@@ -145,7 +119,7 @@ impl<'l> Iterator for PathConvIter<'l> {
                     return_event = Some(PathEvent::Begin { at: self.first });
                 }
             }
-            Some(usvg::PathSegment::LineTo { x, y }) => {
+            Some(::usvg::PathSegment::LineTo { x, y }) => {
                 self.needs_end = true;
                 let from = self.prev;
                 self.prev = (x, y).convert();
@@ -154,7 +128,7 @@ impl<'l> Iterator for PathConvIter<'l> {
                     to: self.prev,
                 });
             }
-            Some(usvg::PathSegment::CurveTo {
+            Some(::usvg::PathSegment::CurveTo {
                 x1,
                 y1,
                 x2,
@@ -172,7 +146,7 @@ impl<'l> Iterator for PathConvIter<'l> {
                     to: self.prev,
                 });
             }
-            Some(usvg::PathSegment::ClosePath) => {
+            Some(::usvg::PathSegment::ClosePath) => {
                 self.needs_end = false;
                 self.prev = self.first;
                 return_event = Some(PathEvent::End {
@@ -213,7 +187,7 @@ impl Convert<Point> for (f64, f64) {
     }
 }
 
-impl<'a> Convert<PathConvIter<'a>> for &'a usvg::Path {
+impl<'a> Convert<PathConvIter<'a>> for &'a ::usvg::Path {
     fn convert(self) -> PathConvIter<'a> {
         return PathConvIter {
             iter: self.data.segments(),
@@ -231,27 +205,27 @@ impl<'a> Convert<PathConvIter<'a>> for &'a usvg::Path {
     }
 }
 
-impl Convert<(Color, DrawType)> for &usvg::Stroke {
+impl Convert<(Color, DrawType)> for &::usvg::Stroke {
     #[inline]
     fn convert(self) -> (Color, DrawType) {
         let color = match self.paint {
-            usvg::Paint::Color(c) => {
-                Color::rgba_u8(c.red, c.green, c.blue, self.opacity.to_u8())
+            ::usvg::Paint::Color(c) => {
+                Color::srgba_u8(c.red, c.green, c.blue, self.opacity.to_u8())
             }
-            usvg::Paint::LinearGradient(_)
-            | usvg::Paint::RadialGradient(_)
-            | usvg::Paint::Pattern(_) => Color::default(),
+            ::usvg::Paint::LinearGradient(_)
+            | ::usvg::Paint::RadialGradient(_)
+            | ::usvg::Paint::Pattern(_) => Color::default(),
         };
 
         let linecap = match self.linecap {
-            usvg::LineCap::Butt => lyon_tessellation::LineCap::Butt,
-            usvg::LineCap::Square => lyon_tessellation::LineCap::Square,
-            usvg::LineCap::Round => lyon_tessellation::LineCap::Round,
+            ::usvg::LineCap::Butt => lyon_tessellation::LineCap::Butt,
+            ::usvg::LineCap::Square => lyon_tessellation::LineCap::Square,
+            ::usvg::LineCap::Round => lyon_tessellation::LineCap::Round,
         };
         let linejoin = match self.linejoin {
-            usvg::LineJoin::Miter => lyon_tessellation::LineJoin::Miter,
-            usvg::LineJoin::Bevel => lyon_tessellation::LineJoin::Bevel,
-            usvg::LineJoin::Round => lyon_tessellation::LineJoin::Round,
+            ::usvg::LineJoin::Miter => lyon_tessellation::LineJoin::Miter,
+            ::usvg::LineJoin::Bevel => lyon_tessellation::LineJoin::Bevel,
+            ::usvg::LineJoin::Round => lyon_tessellation::LineJoin::Round,
         };
 
         let opt = lyon_tessellation::StrokeOptions::tolerance(0.01)

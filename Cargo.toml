@@ -5,7 +5,7 @@ authors = [
   "Sebastian J. Hamel <sebjfk@gmail.com>",
   "Spencer C. Imbleau <spencer@imbleau.com>",
 ]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 [profile.release]
@@ -18,25 +18,14 @@ lto = true
 opt-level = 3
 
 [dependencies]
-bevy = { version = "0.12", default-features = false, features = [
-  "animation",
-  "bevy_asset",
-  "bevy_audio",
-  "bevy_core_pipeline",
-  "bevy_render",
-  "bevy_sprite",
-  "bevy_text",
-  "bevy_ui",
-  "bevy_winit",
-  "png",
+bevy = { version = "0.14.0", default-features = true }
+image = "0.25.1"
+bevy_vello = { git = "https://github.com/linebender/bevy_vello", branch = "bevy-0.14", features = [
+  "svg",
 ] }
-image = "0.24"
-winit = "0.28"
-bevy-vello = { git = "https://github.com/vectorgameexperts/bevy-vello", version = "0.3", features = [
-  "debug",
-] }
-bevy_rapier2d = { version = "0.23", features = ["debug-render-2d"] }
-dolly = "0.4"
+bevy_rapier2d = { version = "0.27.0-rc.1", features = ["debug-render-2d"] }
+dolly = "0.4.3"
+usvg = "0.33"
 
 lyon_geom = "1.0"
 lyon_tessellation = "1.0"

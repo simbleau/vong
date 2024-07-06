@@ -8,7 +8,12 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
-use bevy_vello::{debug::DebugVisualizations, VelloVectorBundle};
+use bevy_vello::{
+    debug::DebugVisualizations,
+    integrations::{VelloAsset, VelloAssetAlignment},
+    render::ZFunction,
+    VelloAssetBundle,
+};
 use std::f32::consts::PI;
 
 pub struct PongGamePlugin;
@@ -17,27 +22,35 @@ impl Plugin for PongGamePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, ball::modify_body_velocity);
         app.add_systems(Update, paddle::move_paddle);
-        app.add_systems(Startup, (setup_game, setup_instruction_text));
+        app.add_systems(Startup, (setup_game, setup_instruction_text))
+            .add_systems(Update, low_opacity_tiger);
     }
 }
+
+// A component marker for the Ghostscript Tiger
+#[derive(Component)]
+pub struct TigerTag;
 
 /// Setup the game
 pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     // Background
-    commands.spawn(VelloVectorBundle {
-        vector: asset_server.load("bg.svg"),
-        origin: bevy_vello::Origin::Center,
-        debug_visualizations: DebugVisualizations::Hidden,
-        transform: Transform::from_scale(Vec3::splat(3.0)),
-        ..default()
-    });
+    commands
+        .spawn(VelloAssetBundle {
+            vector: asset_server.load("Ghostscript_Tiger.svg"),
+            debug_visualizations: DebugVisualizations::Hidden,
+            z_function: ZFunction::Value(1.0),
+            transform: Transform::from_xyz(-25.0, -25.0, 0.)
+                .with_scale(Vec3::splat(3.0)),
+            ..default()
+        })
+        .insert(TigerTag);
 
     // Spawn pan
-    commands.spawn(VelloVectorBundle {
+    commands.spawn(VelloAssetBundle {
         vector: asset_server.load("pan.svg"),
-        origin: bevy_vello::Origin::Center,
         debug_visualizations: DebugVisualizations::Hidden,
-        transform: Transform::from_xyz(-270.0, 343., 0.)
+        z_function: ZFunction::Value(0.0),
+        transform: Transform::from_xyz(-0.0, 0.0, 0.)
             .with_scale(Vec3::splat(3.3)),
         ..default()
     });
@@ -57,12 +70,13 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     // Paddle 0
     commands
         .spawn(PaddleBundle {
-            sprite: VelloVectorBundle {
+            sprite: VelloAssetBundle {
                 vector: asset_server.load("bacon.svg"),
-                origin: bevy_vello::Origin::Center,
                 debug_visualizations: DebugVisualizations::Hidden,
-                transform: Transform::from_xyz(-385.0, 0.0, 0.0)
-                    .with_scale(Vec3::new(-0.2, 0.1, 0.1))
+                alignment: VelloAssetAlignment::TopLeft,
+                z_function: ZFunction::Value(2.0),
+                transform: Transform::from_xyz(-405.0, 0.0, 0.0)
+                    .with_scale(Vec3::new(-0.2, 0.2, 1.0))
                     .with_rotation(Quat::from_rotation_z(90_f32.to_radians())),
                 ..default()
             },
@@ -76,12 +90,13 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
     // Paddle 1
     commands
         .spawn(PaddleBundle {
-            sprite: VelloVectorBundle {
+            sprite: VelloAssetBundle {
                 vector: asset_server.load("bacon.svg"),
-                origin: bevy_vello::Origin::Center,
                 debug_visualizations: DebugVisualizations::Hidden,
-                transform: Transform::from_xyz(385.0, 0.0, 0.0)
-                    .with_scale(Vec3::new(-0.2, 0.1, 0.1))
+                alignment: VelloAssetAlignment::TopLeft,
+                z_function: ZFunction::Value(2.0),
+                transform: Transform::from_xyz(305.0, 0.0, 0.0)
+                    .with_scale(Vec3::new(-0.2, 0.2, 1.0))
                     .with_rotation(Quat::from_rotation_z(90_f32.to_radians())),
                 ..default()
             },
@@ -118,10 +133,10 @@ pub fn setup_game(mut commands: Commands, asset_server: ResMut<AssetServer>) {
             mass: 1.0,
             principal_inertia: 1000.0,
         }))
-        .insert(VelloVectorBundle {
+        .insert(VelloAssetBundle {
             vector: asset_server.load("egg.svg"),
-            origin: bevy_vello::Origin::Center,
-            debug_visualizations: DebugVisualizations::Hidden,
+            z_function: ZFunction::Value(2.0),
+            alignment: VelloAssetAlignment::TopLeft,
             transform: Transform::from_scale(Vec3::splat(0.1)),
             ..Default::default()
         })
@@ -173,5 +188,16 @@ fn setup_instruction_text(mut commands: Commands) {
                 ..default()
             }),
         );
+    }
+}
+
+fn low_opacity_tiger(
+    q: Query<&Handle<VelloAsset>, With<TigerTag>>,
+    mut vectors: ResMut<Assets<VelloAsset>>,
+) {
+    for tiger in q.iter() {
+        if let Some(tiger) = vectors.get_mut(tiger) {
+            tiger.alpha = 0.2;
+        }
     }
 }

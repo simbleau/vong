@@ -17,7 +17,6 @@ mod game;
 
 pub fn main() {
     App::new()
-        .insert_resource(AssetMetaCheck::Never)
         .add_plugins(
             DefaultPlugins
                 .set(WindowPlugin {
@@ -30,12 +29,17 @@ pub fn main() {
                     }),
                     ..default()
                 })
+                .set(AssetPlugin {
+                    meta_check: AssetMetaCheck::Never,
+                    ..default()
+                })
                 .set(RenderPlugin {
                     render_creation: WgpuSettings {
                         backends: Some(Backends::PRIMARY),
                         ..default()
                     }
                     .into(),
+                    ..default()
                 }),
         )
         .add_plugins(VelloPlugin)

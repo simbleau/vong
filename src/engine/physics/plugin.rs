@@ -1,11 +1,9 @@
 use crate::engine::lyon_utils::{self, usvg_draw, Convert};
 use bevy::{prelude::*, render::mesh::VertexAttributeValues};
 use bevy_rapier2d::prelude::*;
-use bevy_vello::{
-    vello_svg::usvg::{self, TreeParsing},
-    VelloVector,
-};
+use bevy_vello::integrations::VelloAsset;
 use lyon_tessellation::{FillTessellator, StrokeTessellator};
+use usvg::TreeParsing;
 
 pub struct PhysicsPlugin;
 
@@ -32,27 +30,25 @@ fn create_vello_colliders(
     // A query for Vello vectors tagged with the [`PhysicsTag`] but do not have
     // a [`Collider`]
     query: Query<
-        (Entity, &Handle<VelloVector>),
+        (Entity, &Handle<VelloAsset>),
         (With<PhysicsTag>, Without<Collider>),
     >,
-    vectors: Res<Assets<VelloVector>>,
 ) {
     for (e, vec_handle) in query.iter() {
-        let Some(vector) = vectors.get(vec_handle) else {
-            return;
-        };
         const EGG: &str = include_str!("../../../assets/egg.svg");
         const BACON: &str = include_str!("../../../assets/bacon.svg");
+
         let tree = match vec_handle
             .path()
             .map(|ap| ap.path().to_str().unwrap())
             .unwrap()
         {
             "egg.svg" => {
-                usvg::Tree::from_str(EGG, &usvg::Options::default()).unwrap()
+                ::usvg::Tree::from_str(EGG, &usvg::Options::default()).unwrap()
             }
             "bacon.svg" => {
-                usvg::Tree::from_str(BACON, &usvg::Options::default()).unwrap()
+                ::usvg::Tree::from_str(BACON, &usvg::Options::default())
+                    .unwrap()
             }
             e => panic!("{e:?}"),
         };
@@ -68,10 +64,7 @@ fn create_vello_colliders(
         {
             let points: Vec<Vec2> = positions
                 .iter()
-                .map(|[x, y, _]| {
-                    // Adjust for center origin
-                    Vec2::new(*x - vector.width / 2.0, *y + vector.height / 2.0)
-                })
+                .map(|[x, y, _]| Vec2::new(*x, *y))
                 .collect();
 
             let collider = Collider::convex_hull(points.as_slice()).unwrap();
@@ -80,11 +73,11 @@ fn create_vello_colliders(
     }
 }
 pub fn show_debug_visualizations(
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut query_physics: ResMut<DebugRenderContext>,
     mut query: Query<&mut bevy_vello::debug::DebugVisualizations>,
 ) {
-    if keyboard_input.just_pressed(KeyCode::Q) {
+    if keyboard_input.just_pressed(KeyCode::KeyQ) {
         query_physics.enabled = !query_physics.enabled;
         for mut flag in query.iter_mut() {
             *flag = match *flag {

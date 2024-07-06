@@ -42,7 +42,7 @@ fn drive_camera(
         (With<Camera>, Without<CameraTargetTag>),
     >,
     mut camera_rig_res: Local<Option<CameraRig>>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     mut flag: Local<bool>,
 ) {
     let mut camera_rig = if let Some(cam) = camera_rig_res.deref_mut().take() {
@@ -52,11 +52,11 @@ fn drive_camera(
     };
 
     let mut proj = proj_query.single_mut();
-    if keyboard_input.pressed(KeyCode::Up) {
+    if keyboard_input.pressed(KeyCode::ArrowUp) {
         camera_rig.driver_mut::<Arm>().offset.z -=
             proj.scale * ZOOM_SPEED * time.delta_seconds();
     }
-    if keyboard_input.pressed(KeyCode::Down) {
+    if keyboard_input.pressed(KeyCode::ArrowDown) {
         camera_rig.driver_mut::<Arm>().offset.z +=
             proj.scale * ZOOM_SPEED * time.delta_seconds();
     }
@@ -66,7 +66,7 @@ fn drive_camera(
         .z
         .clamp(MIN_ZOOM, MAX_ZOOM);
 
-    if keyboard_input.just_pressed(KeyCode::C) {
+    if keyboard_input.just_pressed(KeyCode::KeyC) {
         *flag = !*flag;
     }
 

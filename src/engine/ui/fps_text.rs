@@ -2,6 +2,7 @@
 //! The color of the text depends on the fps.
 
 use bevy::{
+    color::palettes::css,
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,
 };
@@ -20,10 +21,6 @@ impl Plugin for FpsTextPlugin {
 // Text components
 #[derive(Component)]
 struct FpsText;
-
-// A unit struct to help identify the color-changing Text component
-#[derive(Component)]
-struct ColorText;
 
 fn setup(mut commands: Commands) {
     // Text with multiple sections
@@ -62,17 +59,17 @@ fn text_update_system(
     mut query: Query<&mut Text, With<FpsText>>,
 ) {
     for mut text in &mut query {
-        if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {
+        if let Some(fps) = diagnostics.get(&FrameTimeDiagnosticsPlugin::FPS) {
             if let Some(value) = fps.smoothed() {
                 // Update the value of the second section
                 text.sections[1].value = format!("{value:.0}");
                 // Update color
                 text.sections[1].style.color = if value > 55.0 {
-                    Color::GREEN
+                    css::LIME.into()
                 } else if value > 30.0 {
-                    Color::YELLOW
+                    css::YELLOW.into()
                 } else {
-                    Color::RED
+                    css::RED.into()
                 };
             }
         }

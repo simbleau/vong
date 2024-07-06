@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_vello::VelloVectorBundle;
+use bevy_vello::VelloAssetBundle;
 
 #[derive(Component)]
 pub struct PaddleProperties {
@@ -21,31 +21,31 @@ impl Default for PaddleProperties {
 #[derive(Default, Bundle)]
 pub struct PaddleBundle {
     pub properties: PaddleProperties,
-    pub sprite: VelloVectorBundle,
+    pub sprite: VelloAssetBundle,
 }
 
 pub fn move_paddle(
     mut query: Query<(&mut Transform, &mut PaddleProperties)>,
-    keyboard_input: Res<Input<KeyCode>>,
+    keyboard_input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
     for (mut paddle_transform, mut paddle) in query.iter_mut() {
         let mut direction = 0.0;
 
         if paddle.player_num == 0 {
-            if keyboard_input.pressed(KeyCode::W) {
+            if keyboard_input.pressed(KeyCode::KeyW) {
                 direction += 1.0;
             }
 
-            if keyboard_input.pressed(KeyCode::S) {
+            if keyboard_input.pressed(KeyCode::KeyS) {
                 direction -= 1.0;
             }
         } else {
-            if keyboard_input.pressed(KeyCode::I) {
+            if keyboard_input.pressed(KeyCode::KeyI) {
                 direction += 1.0;
             }
 
-            if keyboard_input.pressed(KeyCode::K) {
+            if keyboard_input.pressed(KeyCode::KeyK) {
                 direction -= 1.0;
             }
         }
