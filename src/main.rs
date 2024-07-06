@@ -16,6 +16,13 @@ mod engine;
 mod game;
 
 pub fn main() {
+    // Check for WebGPU
+    if !webgpu_check::is_webgpu_available() {
+        const WEBGPU_FORM: &str = include_str!("../assets/webgpu_form.html");
+        replace_html::replace_by_id("canvas-container", WEBGPU_FORM).unwrap();
+        return;
+    }
+
     App::new()
         .add_plugins(
             DefaultPlugins
@@ -25,6 +32,7 @@ pub fn main() {
                         present_mode: PresentMode::AutoVsync,
                         fit_canvas_to_parent: true,
                         prevent_default_event_handling: true,
+                        canvas: Some("#c".to_string()),
                         ..default()
                     }),
                     ..default()

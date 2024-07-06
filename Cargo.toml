@@ -26,6 +26,8 @@ bevy_vello = { git = "https://github.com/linebender/bevy_vello", branch = "bevy-
 bevy_rapier2d = { version = "0.27.0-rc.1", features = ["debug-render-2d"] }
 dolly = "0.4.3"
 usvg = "0.33"
+webgpu_check = "0.1.2"
+replace_html = "0.1.0"
 
 lyon_geom = "1.0"
 lyon_tessellation = "1.0"

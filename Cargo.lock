@@ -2130,7 +2130,7 @@ dependencies = [
  "vec_map",
  "wasm-bindgen",
  "web-sys",
- "windows 0.52.0",
+ "windows 0.54.0",
 ]
 
 [[package]]
@@ -3901,6 +3901,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "19b30a45b0cd0bcca8037f3d0dc3421eaf95327a17cad11964fb8179b4fc4832"
 
 [[package]]
+name = "replace_html"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "31baa99a695e09e652239332b315a51c4ef317d4c6dd8e4873dc1b5160cc3ea1"
+dependencies = [
+ "thiserror",
+ "web-sys",
+]
+
+[[package]]
 name = "rgb"
 version = "0.8.40"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4918,9 +4928,11 @@ dependencies = [
  "lyon_geom",
  "lyon_path",
  "lyon_tessellation",
+ "replace_html",
  "roxmltree 0.13.1",
  "svgtypes 0.9.0",
  "usvg 0.33.0",
+ "webgpu_check",
 ]
 
 [[package]]
@@ -5023,6 +5035,15 @@ checksum = "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
+]
+
+[[package]]
+name = "webgpu_check"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "67a96a9fd985420441d201d9d2c9fa423aec60f9fb8713d497bb405cf482fde9"
+dependencies = [
+ "web-sys",
 ]
 
 [[package]]
