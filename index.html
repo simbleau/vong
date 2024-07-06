@@ -1,6 +1,44 @@
-<!doctype html><html lang=en-US><title>Vong</title><script type=module>
-import init, * as bindings from '/vong/vong-05cf8e986278bf02e18ae3b4cb3db8ea96fb472448b90a658483a839f1f9e4fd9bbbaee73a7590bd1e48189a8e9588c7.js';
-init('/vong/vong-05cf8e986278bf02e18ae3b4cb3db8ea96fb472448b90a658483a839f1f9e4fd9bbbaee73a7590bd1e48189a8e9588c7_bg.wasm');
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <!-- Title -->
+  <title>Vong</title>
+
+  <!-- Links -->
+  
+<script type="module" nonce="A71jJvQTuOfv1PxNATBptw==">
+import init, * as bindings from '/vong/vong-cafb3d86ab347503.js';
+const wasm = await init('/vong/vong-cafb3d86ab347503_bg.wasm');
+
+
 window.wasmBindings = bindings;
 
-</script><link as=fetch crossorigin href=/vong/vong-05cf8e986278bf02e18ae3b4cb3db8ea96fb472448b90a658483a839f1f9e4fd9bbbaee73a7590bd1e48189a8e9588c7_bg.wasm integrity=sha384-Bc-OmGJ4vwLhiuO0yz246pb7RyRIuQplhIOoOfH55P2bu67nOnWQvR5IGJqOlYjH rel=preload type=application/wasm><link crossorigin href=/vong/vong-05cf8e986278bf02e18ae3b4cb3db8ea96fb472448b90a658483a839f1f9e4fd9bbbaee73a7590bd1e48189a8e9588c7.js integrity=sha384-9ykT7zqmdPf0HDYop9DoJT8vwRvD1fSIoT42DsT0rG20gnr5Q94YeHc8H20aN5Nn rel=modulepreload></head><body><style>body{margin:0;padding:0;height:100vh;width:100vw;overflow:hidden}canvas{outline:none;-webkit-tap-highlight-color:rgba(255,255,255,0)}</style></body></html>
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script>
+  
+
+<link rel="modulepreload" href="/vong/vong-cafb3d86ab347503.js" crossorigin=anonymous integrity="sha384-YdHsZH7mnTHPopTHIkCs2Mcq4HVySt7IW9ty+eakBSp5BDHkdgfW/P41uKgO2MlH">
+<link rel="preload" href="/vong/vong-cafb3d86ab347503_bg.wasm" crossorigin=anonymous integrity="sha384-TieP394jV1z8LZqcDEFWZCaFaHSVcTuML1itoOvkR917Nxa9rAH5rekXzwDWrfyC" as="fetch" type="application/wasm"></head>
+
+<body>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    canvas {
+      outline: none;
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+      /* mobile webkit */
+    }
+  </style>
+</body>
+
+</html>
